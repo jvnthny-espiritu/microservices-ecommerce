@@ -1,0 +1,30 @@
+# Web
+fastapi>=0.119.0
+uvicorn[standard]>=0.22.0
+
+# DB
+SQLAlchemy>=2.0.21
+
+# Pydantic v2 + email support
+pydantic[email]>=2.11.0
+pydantic-core>=2.11.0
+email-validator>=2.2.0
+
+# Password hashing (bcrypt) + compatibility
+passlib[argon2]>=1.7.4
+argon2-cffi>=23.2.0
+
+# Auth
+python-jose>=3.3.0
+
+# Migrations & CLI (optional)
+alembic>=1.11.1
+
+# Testing + HTTP client
+pytest>=7.4.0
+httpx>=0.24.0
+
+# typing helpers
+typing-extensions>=4.8.0
+
+python-multipart>=0.0.20

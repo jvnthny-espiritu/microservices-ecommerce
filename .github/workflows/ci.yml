@@ -1,0 +1,30 @@
+name: User Service CI
+
+on:
+  push:
+    paths:
+      - 'services/user-service/**'
+  pull_request:
+    paths:
+      - 'services/user-service/**'
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.13'
+
+      - name: Install dependencies
+        working-directory: services/user-service
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run tests
+        working-directory: services/user-service
+        run: pytest -q

@@ -1,0 +1,9 @@
+version: "3.8"
+services:
+  user-service:
+    volumes:
+      - ./app:/app
+    environment:
+      - DATABASE_URL=sqlite:///./user.db
+    ports:
+      - "8000:8000"

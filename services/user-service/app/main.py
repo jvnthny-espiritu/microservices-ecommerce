@@ -1,23 +1,14 @@
-import os
 from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.orm import Session
 
-from . import models, schemas, crud, auth, database
+from . import models, schemas, crud, auth
+from .database import Base, engine, get_db
 
 # Only for dev/demo: create DB tables
-models.Base = database.Base  # no-op to satisfy linters
-models.Base.metadata = database.Base.metadata
-database.Base.metadata.create_all(bind=database.engine)
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="User Service")
-
-def get_db():
-    db = database.SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
 
 @app.post("/register", response_model=schemas.UserOut, status_code=status.HTTP_201_CREATED)
 def register(user_in: schemas.UserCreate, db: Session = Depends(get_db)):

@@ -17,6 +17,9 @@ argon2-cffi>=23.2.0
 # Auth
 python-jose>=3.3.0
 
+# Rate limiting
+slowapi>=0.1.9
+
 # Migrations & CLI (optional)
 alembic>=1.11.1
 

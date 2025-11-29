@@ -1,4 +1,6 @@
 import os
+import secrets
+import warnings
 from datetime import datetime, timedelta, timezone
 from typing import Optional
 
@@ -10,7 +12,29 @@ from sqlalchemy.orm import Session
 from . import crud, models
 from .database import get_db
 
-JWT_SECRET = os.getenv("JWT_SECRET", "devsecret")
+# Minimum 32 bytes (256 bits) recommended for HS256
+MIN_SECRET_LENGTH = 32
+
+def _get_jwt_secret() -> str:
+    """Get JWT secret with validation for production use."""
+    secret = os.getenv("JWT_SECRET", "")
+    if not secret:
+        # Generate secure default for development only
+        secret = secrets.token_urlsafe(32)
+        warnings.warn(
+            "JWT_SECRET not set. Using auto-generated secret. "
+            "Set JWT_SECRET env var with 32+ random bytes for production.",
+            UserWarning,
+        )
+    elif len(secret) < MIN_SECRET_LENGTH:
+        warnings.warn(
+            f"JWT_SECRET is too short ({len(secret)} chars). "
+            f"Use at least {MIN_SECRET_LENGTH} random bytes for production security.",
+            UserWarning,
+        )
+    return secret
+
+JWT_SECRET = _get_jwt_secret()
 ALGORITHM = os.getenv("JWT_ALGORITHM", "HS256")
 ACCESS_TOKEN_EXPIRE_MINUTES = int(os.getenv("ACCESS_TOKEN_EXPIRE_MINUTES", "120"))
 

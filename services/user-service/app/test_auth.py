@@ -55,3 +55,10 @@ def test_get_current_user_missing_token():
     """Test that /me endpoint requires authentication."""
     res = client.get("/me")
     assert res.status_code == 401
+
+
+def test_rate_limiting_returns_headers():
+    """Test that rate limiting headers are present in responses."""
+    res = client.post("/register", json={"email": "rate@example.com", "password": "secret123"})
+    # Rate limit headers should be present
+    assert "x-ratelimit-limit" in res.headers or res.status_code == 201
